@@ -35,5 +35,8 @@ public class Node<T> {
 	public void setParent(Node<T> parent) {
 		this.parent = parent;
 	}
-	
+	@Override
+	public String toString() {
+		return value.toString();
+	}
 }

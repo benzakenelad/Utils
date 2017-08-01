@@ -1,12 +1,17 @@
 package Trees;
 
 import java.util.Comparator;
+import java.util.Stack;
 
 public class BST<T> implements Tree<T> {
 
 	private Node<T> root;
 	private Comparator<T> comp;
 
+	public Node<T> getRoot(){
+		return root;
+	}
+	
 	public BST(Comparator<T> comp) {
 		this.comp = comp;
 	}
@@ -75,9 +80,30 @@ public class BST<T> implements Tree<T> {
 	@Override
 	public void sortedPrint() {
 		if (root != null)
-			recursivelyPrint(root);
+			iterativePrint(root);
+	}
+	
+	private void iterativePrint(Node<T> node){
+		if(node == null)
+			return;
+		Stack<Node<T>> stack = new Stack<Node<T>>();
+		stack.push(node);
+		while(!stack.isEmpty()){
+			if(node != null){
+				node = node.getLeftNode();
+				if(node != null)
+					stack.push(node);
+				continue;
+			}
+			node = stack.pop();
+			System.out.println(node.getValue());
+			node = node.getRightNode();
+			if(node != null)
+				stack.push(node);	
+		}
 	}
 
+	@SuppressWarnings("unused")
 	private void recursivelyPrint(Node<T> node) {
 		if (node == null)
 			return;
@@ -85,6 +111,35 @@ public class BST<T> implements Tree<T> {
 		recursivelyPrint(node.getLeftNode());
 		System.out.println(node.getValue());
 		recursivelyPrint(node.getRightNode());
+	}
+	
+	public void recursivePostOrder(Node<T> node){
+		if (node == null)
+			return;
+
+		recursivePostOrder(node.getLeftNode());
+		recursivePostOrder(node.getRightNode());
+		System.out.println(node.getValue());
+	}
+	
+	public void iterativePostOrder(Node<T> node){
+		Stack<Node<T>> s1, s2;
+		s1 = new Stack<Node<T>>();
+		s2 = new Stack<Node<T>>();
+		s1.push(node);
+		Node<T> current = null;
+		while(!s1.isEmpty()){
+			current = s1.pop();
+			if(current.getLeftNode() != null)
+				s1.push(current.getLeftNode());
+			if(current.getRightNode() != null)
+				s1.push(current.getRightNode());
+			s2.push(current);
+		}
+		while(!s2.isEmpty()){
+			System.out.println(s2.pop());
+		}
+		
 	}
 
 	@Override
@@ -121,6 +176,20 @@ public class BST<T> implements Tree<T> {
 			else
 				currentNode = currentNode.getRightNode();
 		}
+	}
+	
+	public void iterativePreOrder(Node<T> node){
+		Stack<Node<T>> stack = new Stack<Node<T>>();
+		stack.push(node);
+		Node<T> current = null;
+		while(!stack.isEmpty()){
+			current = stack.pop();
+			System.out.println(current);
+			if(current.getRightNode() != null)
+				stack.push(current.getRightNode());
+			if(current.getLeftNode() != null)
+				stack.push(current.getLeftNode());
+		}			
 	}
 
 	@Override
